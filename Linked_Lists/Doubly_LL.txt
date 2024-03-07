@@ -1,0 +1,231 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int data;
+    struct node *next;
+    struct node *pre;
+};
+struct node *head=NULL;
+struct node *temp;
+void Ins_Beg(int val)
+{
+    //newnode=(struct node*)malloc(sizeof(struct node))
+    struct node *newnode=malloc(sizeof(struct node));
+    newnode->data=val;
+    newnode->pre=NULL;
+    if(head==NULL)
+    {
+        head=newnode;
+        newnode->next=NULL;
+    }
+    else
+    {
+        newnode->next=head;
+        head->pre=newnode;
+        head=newnode;
+    }
+    temp=head;
+    while(temp!=NULL)
+    {
+        printf("%d ",temp->data);
+        temp=temp->next;
+    }
+}
+void Ins_End(int val)
+{
+    struct node *newnode=malloc(sizeof(struct node));
+    newnode->data=val;
+    newnode->next=NULL;
+    if(head==NULL)
+    {
+        head=newnode;
+        newnode->pre=NULL;
+    }
+    else
+    {
+        temp=head;
+        while(temp->next!=NULL)
+        temp=temp->next;
+        temp->next=newnode;
+        newnode->pre=temp;
+    }
+    temp=head;
+    while(temp!=NULL)
+    {
+        printf("%d ",temp->data);
+        temp=temp->next;
+    }
+}
+void Ins_Mid(int val,int p)
+{
+    int i;
+    struct node *newnode=malloc(sizeof(struct node));
+    newnode->data=val;
+    temp=head;
+    for(i=0;i<p-2;i++)
+    {
+        temp=temp->next;
+        if(temp==NULL)
+        break;
+    }
+    if(temp!=NULL)
+    {
+        newnode->pre=temp;
+        newnode->next=temp->next;
+        temp->next=newnode;
+        temp=newnode->next;
+        temp->pre=newnode;
+    }
+    temp=head;
+    while(temp!=NULL)
+    {
+        printf("%d ",temp->data);
+        temp=temp->next;
+    }
+}
+void Del_Beg()
+{
+    if(head==NULL)
+    printf("Deletion not possible");
+    else
+    {
+        temp=head;
+        head=head->next;
+        head->pre=NULL;
+        free(temp);
+    }
+    temp=head;
+    while(temp!=NULL)
+    {
+        printf("%d ",temp->data);
+        temp=temp->next;
+    }
+}
+void Del_End()
+{
+    if(head==NULL)
+    printf("Deletion not possible");
+    else if(head->next==NULL)
+    {
+        head=NULL;
+        free(head);
+    }
+    else
+    {
+        struct node *temp1;
+        temp=head;
+        temp1=head;
+        while(temp->next!=NULL)
+        {
+            temp1=temp;
+            temp=temp->next;
+        }
+        temp1->next=NULL;
+        free(temp);
+    }
+    temp=head;
+    while(temp!=NULL)
+    {
+        printf("%d ",temp->data);
+        temp=temp->next;
+    }
+}
+void Del_Mid(int p)
+{
+    int i;
+    if(head==NULL)
+    printf("Deletion not possible");
+    else
+    {
+        struct node *temp1;
+        temp=head;
+        temp1=head;
+        for(i=0;i<p-1;i++)
+        {
+            temp1=temp;
+            temp=temp->next;
+            if(temp==NULL)
+            break;
+        }
+        temp1->next=temp->next;
+        temp1=temp->next;
+        temp1->pre=temp->pre;
+        free(temp);
+        temp=head;
+        while(temp!=NULL)
+        {
+            printf("%d ",temp->data);
+            temp=temp->next;
+        }
+    }
+}
+void Display()
+{
+    temp=head;
+    while(temp!=NULL)
+    {
+        printf("%d ",temp->data);
+        temp=temp->next;
+    }
+}
+int main()
+{
+    int number,data,i=5,position;
+    struct node *newnode=malloc(sizeof(struct node));
+    newnode->data=i;
+    newnode->next=NULL;
+    newnode->pre=NULL;
+    head=newnode;
+    while(i>0)
+    {
+        i--;
+        struct node *newnode=malloc(sizeof(struct node));
+        newnode->data=i;
+        newnode->next=NULL;
+        temp=head;
+        while(temp->next!=NULL)
+        temp=temp->next;
+        temp->next=newnode;
+        newnode->pre=temp;
+    }
+    temp=head;
+    printf("list is\n");
+    while(temp!=NULL)
+    {
+        printf("%d ",temp->data);
+        temp=temp->next;
+    }
+    printf("\nenter option for any one of following\n1.Insertion at beginning\n2.Insertion at End\n3.Insertion at middle\n4.Deletion at beginning\n5.Deletion at End\n6.Deletion at middle\n7.Display\n");
+    scanf("%d",&number);
+    switch(number)
+    {
+        case 1: printf("Enter data to be inserted\n");
+                scanf("%d",&data);
+                Ins_Beg(data);
+                break;
+        case 2: printf("Enter data to be inserted\n");
+                scanf("%d",&data);
+                Ins_End(data);
+                break;
+        case 3: printf("Enter data to be inserted\n");
+                scanf("%d",&data);
+                printf("Enter the position , where element to be inserted\n");
+                scanf("%d",&position);
+                Ins_Mid(data,position);
+                break;
+        case 4: Del_Beg();
+                break;
+        case 5: Del_End();
+                break;
+        case 6: printf("Enter the position , where element to be deleted\n");
+                scanf("%d",&position);
+                Del_Mid(position);
+                break;
+        case 7: Display();
+                break;
+        default: printf("Invalid Input");
+                 break;
+    }
+    return 0;
+}

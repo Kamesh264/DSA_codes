@@ -1,0 +1,244 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node
+{
+    int data;
+    struct node *next;
+};
+//void display(struct node *);
+struct node *head = NULL;
+void display(struct node *ptr)
+{
+    struct node *temp;
+    temp = ptr;
+    while (temp != NULL)
+    {
+        printf("%d  ", temp->data);
+        temp = temp->next;
+    }
+}
+struct node *insert_at_beg(struct node *head, int data)
+{
+    struct node *ptr = (struct node *)malloc(sizeof(struct node));
+    if (head == NULL)
+    {
+        ptr->data = data;
+        ptr->next = NULL;
+        head = ptr;
+        return head;
+    }
+    ptr->data = data;
+    ptr->next = head;
+    head = ptr;
+    return head;
+}
+struct node *insert_at_end(struct node *head, int val)
+{
+    struct node *ptr = (struct node *)malloc(sizeof(struct node));
+    if (head == NULL)
+    {
+        ptr->data = val;
+        ptr->next = NULL;
+        head = ptr;
+        return head;
+    }
+    ptr->data = val;
+    ptr->next = NULL;
+    struct node *temp;
+    temp = head;
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    temp->next = ptr;
+    return head;
+}
+struct node *insert_at_pos(struct node *head, int val, int pos)
+{
+    struct node *ptr = (struct node *)malloc(sizeof(struct node));
+    ptr->data = val;
+    if (head == NULL)
+    {
+        ptr->next = NULL;
+        head = ptr;
+        return head;
+    }
+    struct node *temp;
+    temp = head;
+    for (int i = 0; i < pos - 2; i++)
+    {
+        temp = temp->next;
+    }
+    ptr->next = temp->next;
+    temp->next = ptr;
+    return head;
+}
+void del_at_beg(struct node *ptr)
+{
+    struct node *temp;
+    temp = head;
+    if (temp== NULL)
+    {
+        printf("Deletion is not possible");
+    }
+    else
+    {
+        ptr = temp->next;
+        free(temp);
+        head=ptr;
+    }
+}
+void del_at_pos(struct node *head, int pos1)
+{
+    struct node *temp, *ptr;
+    temp = head;
+    for (int j = 0; j < pos1-2  ; j++)
+    {
+        temp = temp->next;
+    }
+    ptr = temp->next;
+    temp->next = ptr->next;
+    free(ptr);
+}
+void del_at_end(struct node *head)
+{
+    struct node *temp, *temp1;
+    temp = head;
+    temp1 = NULL;
+    if (temp->next == NULL)
+    {
+        head = NULL;
+        free(temp);
+    }
+    else
+    {
+        while (temp->next != NULL)
+        {
+            temp1 = temp;
+            temp = temp->next;
+        }
+        temp1->next = NULL;
+        free(temp);
+    }
+}
+void create_List(int n)
+{
+    struct node *newNode, *temp;
+    int data, i;
+
+    head = (struct node *)malloc(sizeof(struct node));
+    if(head == NULL)
+    {
+        printf("Unable to allocate memory.");
+    }
+    else
+    {
+        printf("Enter the data of node 1: ");
+        scanf("%d", &data);
+
+        head->data = data; 
+        head->next = NULL; 
+
+        temp = head;
+
+        for(i=2; i<=n; i++)
+        {
+            newNode = (struct node *)malloc(sizeof(struct node));
+            if(newNode == NULL)
+            {
+                printf("Unable to allocate memory.");
+                break;
+            }
+            else
+            {
+                printf("Enter the data of node %d: ", i);
+                scanf("%d", &data);
+
+                newNode->data = data; 
+                newNode->next = NULL; 
+
+                temp->next = newNode; 
+                
+                temp = temp->next; 
+            }
+        }
+        printf("List Created .. \n");
+    }
+}
+
+void main()
+{
+    int n,pos,pos1,choice,val1,val2,val3;
+    char z;
+    printf("Enter number of desired nodes : ");
+    scanf("%d",&n);
+    create_List(n);
+    display(head);
+    
+    printf("\nWhat do you want to do:\n");
+    printf("1.Insert at beginning\n"); 
+    printf("2.Insert at End\n"); 
+    printf("3.Insert at Middle\n");
+    printf("4.Delete at beginning\n");
+    printf("5.Delete at End\n");
+    printf("6.Delete at Middle\n");
+    z:
+    printf("Enter your choice : ");
+    scanf("%d",&choice);
+    switch(choice)
+    {
+    case 1:{
+     printf("Enter a value to add : ");
+     scanf("%d",&val1);
+     head = insert_at_beg(head,val1);
+     printf("\nAfter adding node at start,linked list is : \n");
+     display(head);
+     break;
+      }
+      case 2:{
+      printf("Enter a value to add : ");
+      scanf("%d",&val2);
+      head = insert_at_end(head,val2);
+      printf("\nAfter adding node at end,linked list is : \n");
+       display(head);
+      break;
+       }
+       case 3:{
+       printf("Enter a value to add : ");
+       scanf("%d",&val3);
+       printf("\nEnter postion to add node : \n");
+       scanf("%d",&pos);
+      head = insert_at_pos(head,val3,pos);
+      printf("After adding node at %d position,linked list is : \n",pos);
+      display(head);
+      break;
+       }
+     case 4:{
+     del_at_beg(head);
+     printf("\nAfter deleting node at start,linked list is : \n");
+       display(head);
+       break;
+       }
+       case 5:{
+     del_at_end(head);
+     printf("\nAfter deleting node at end,linked list is : \n");
+     display(head);
+     break;
+     }
+     case 6:{
+     printf("\nEnter postion to delete node : \n");
+     scanf("%d",&pos1);
+     del_at_pos(head,pos1);
+     printf("\nAfter deleting node at %d position,linked list is : \n",pos1);
+     display(head);
+     break;
+     }
+     default :{
+     printf("Enter valid choice :");
+     goto z;
+    }
+    } 
+}
+
+
+
